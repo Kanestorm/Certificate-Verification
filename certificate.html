@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        html,body{
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .container{
+            background-color: #080808;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+        }
+        .box{
+            background-color: black;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            border: 3px solid grey;
+            
+        }
+        p{
+            color: white;
+            font-size: 22px;
+        }
+        input{
+            background-color: #333;
+            color: white;
+            padding: 10px 40px;
+            border: 2px solid rgba(0, 0, 0, 0.126);
+        }
+        button{
+            background-color: rgb(34, 34, 65);
+            padding: 10px 90px;
+            color: white;
+            border: 2px solid grey;
+        }
+        button:hover{
+            cursor: pointer;
+            background-color: rgb(7, 7, 87);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <p>Certificate Verification for DSA Learners</p><br><br>
+            <input id="input" type="text" placeholder="Enter Certificate No."><br><br>
+            <button onclick="but()">Verify</button>
+            <p id="res"></p>
+        </div>
+    </div>
+
+    <script>
+        const SheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMtPgO1R6aocO49vMwZ52-fBB6L1JrZrtnwKH-l0HAjbVuD7qn1cy-1o6fhAVZdUyxp7gXKZnfwIDo/pub?gid=0&single=true&output=csv";
+        
+        async function but(){
+            const input = document.getElementById("input").value.trim();
+            const result = document.getElementById("res");
+
+            if(!input){
+                result.innerHTML = "Please enter Credentials First";
+                return;
+            }
+
+            try{
+                const response = await fetch(SheetURL);
+                const data = await response.text();
+                const certnum = data.split('\n').map(row => row.trim());
+
+                if(certnum.includes(input)){
+                    result.innerHTML = "<span style='color: green;'> Certified Learner</span>";
+                }
+                else{
+                    result.innerHTML = "<span style= 'color: red;'> Enter valid Credentials </span>";
+                }
+            }
+            catch(error){
+                result.innerHTML = "<span style= 'color: lightblue;'> Error in loading </span>";
+            }
+        }
+
+    </script>
+</body>
+</html>
